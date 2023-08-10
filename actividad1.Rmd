@@ -1,0 +1,62 @@
+---
+title: "Actividad1"
+author: "Daniel Gonzalez"
+date: "2023-08-10"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(paqueteMET)
+data("vivienda_faltantes")
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r bloque1, echo=FALSE}
+# Instala y carga el paquete ggplot2 si aún no lo tienes instalado
+if (!requireNamespace("ggplot2", quietly = TRUE)) {
+  install.packages("ggplot2")
+}
+library(ggplot2)
+
+# Crear un data frame con los datos
+datos <- data.frame(
+  Zona = c("Zona Centro", "Zona Norte", "Zona Oeste", "Zona Oriente", "Zona Sur"),
+  X3 = c(105, 572, 54, 340, 382),
+  X4 = c(14, 408, 85, 8, 1616),
+  X5 = c(4, 770, 290, 2, 1685),
+  X6 = c(1, 172, 775, 1, 1043)
+)
+
+# Convertir el data frame a un formato adecuado para ggplot2
+library(tidyr)
+datos_melted <- pivot_longer(datos, cols = c(X3, X4, X5, X6), names_to = "Nivel", values_to = "Cantidad")
+
+# Crear el gráfico de barras
+grafico <- ggplot(datos_melted, aes(x = Zona, y = Cantidad, fill = Nivel)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Distribución por Zona y Nivel") +
+  xlab("Zona") +
+  ylab("Cantidad") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_manual(values = c("#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3"))
+
+# Imprimir el gráfico
+print(grafico)
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
